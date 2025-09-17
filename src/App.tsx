@@ -1,8 +1,19 @@
 import { useState } from 'react'
 import './App.css'
 
+type Board = {
+  key: number;
+  title: string;
+};
+
 function App() {
-  let [boardList, setBoardList] = useState(false);
+  const BOARDS: Board[] = [
+    { key: 0, title: 'LSB' },
+    { key: 1, title: 'PSJ' }
+  ];
+
+  let [boardPages, setBoardPages] = useState<Board[]>(BOARDS);
+  let [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
 
   return (
     <div className="App">
@@ -10,32 +21,33 @@ function App() {
         <h4>게시판 만들기</h4>
       </div>
 
-      <div className="list">
-        <h4>LSB</h4>
-        <p onClick={ ()=> { setBoardList(!boardList) } }>목록 페이지</p>
-      </div>
-      <div className="list">
-        <h4>PSJ</h4>
-        <p onClick={ ()=> { setBoardList(!boardList) } }>목록 페이지</p>
-      </div>
-
       {
-        boardList? <BoardList></BoardList> : null
+        boardPages.map(function(item, i) {
+          return (
+            <div className="list" key={ item.key }>
+              <h4>{item.title}</h4>
+              <p onClick={ ()=> { setSelectedBoard(item); } }>
+                목록 페이지 이동
+              </p>
+            </div>
+          )
+        })
       }
-      
+
+      { selectedBoard && <BoardList board={ selectedBoard } /> }
     </div>
   )
 }
 
-function BoardList() {
+function BoardList(props: { board: Board }) {
   return (
     <>
       <div className="modal">
-        <h4>제목</h4>
+        <h4>{props.board.title} 게시판 목록</h4>
         <p>내용</p>
       </div>
     </>
   )
 }
 
-export default App
+export default App;

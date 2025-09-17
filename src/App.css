@@ -21,4 +21,8 @@
     padding : 20px;
     background : #eee;
     text-align : left;
-  }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

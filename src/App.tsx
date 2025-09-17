@@ -22,30 +22,61 @@ function App() {
       </div>
 
       {
+        selectedBoard === null? 
+        (
+          // 선택 페이지
+          <BoardMain boardPages={boardPages} setSelectedBoard={setSelectedBoard} />
+        ) 
+        : 
+        (
+          // 목록 페이지
+          <BoardList board={ selectedBoard } goMain={ ()=> setSelectedBoard(null) } /> 
+        )
+      }
+    </div>
+  )
+}
+
+type BoardListProps = {
+  board: Board;
+  goMain: ()=> void;
+}
+
+function BoardList(props: BoardListProps) {
+  const { board, goMain } = props;
+
+  return (
+    <>
+      <div className="modal">
+        <h4>{board.title} 게시판 목록</h4>
+        <button onClick={goMain}>뒤로가기</button>
+        <p>내용</p>
+      </div>
+    </>
+  )
+}
+
+type BoardMainProps = {
+  boardPages: Board[];
+  setSelectedBoard: (board: Board) => void;
+};
+
+function BoardMain(props: BoardMainProps) {
+  const { boardPages, setSelectedBoard } = props;
+  return (
+    <>
+      {
         boardPages.map(function(item, i) {
           return (
             <div className="list" key={ item.key }>
               <h4>{item.title}</h4>
-              <p onClick={ ()=> { setSelectedBoard(item); } }>
+              <p className="cursor-pointer" onClick={ ()=> { setSelectedBoard(item); } }>
                 목록 페이지 이동
               </p>
             </div>
           )
         })
       }
-
-      { selectedBoard && <BoardList board={ selectedBoard } /> }
-    </div>
-  )
-}
-
-function BoardList(props: { board: Board }) {
-  return (
-    <>
-      <div className="modal">
-        <h4>{props.board.title} 게시판 목록</h4>
-        <p>내용</p>
-      </div>
     </>
   )
 }
